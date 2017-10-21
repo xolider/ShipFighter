@@ -1,6 +1,7 @@
 package com.xolider.shipfighter.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -44,6 +45,7 @@ public class GameScreen implements Screen {
     private TextButton mainMenu;
     private BitmapFont overFont;
     private float lineOverWidth, lineOverHeight;
+    private TextButton mainMenuOver;
 
     private Ship ship;
 
@@ -59,6 +61,7 @@ public class GameScreen implements Screen {
         TextureRegion shotRegion = new TextureRegion(new Texture("shot.png"));
         TextureRegion pauseRegion = new TextureRegion(new Texture("pause.png"));
         TextureRegion planetRegion = new TextureRegion(new Texture("planet.png"));
+        TextureRegion mainMenuRegion = new TextureRegion(new Texture("label_bg.png"));
         meteorRegion = new TextureRegion(new Texture("meteor.png"));
         planetRegion.flip(false, true);
         right = new Button(right_arrow, Constants.WIDTH-right_arrow.getRegionWidth()-30, Constants.HEIGHT-right_arrow.getRegionHeight()-30, 1);
@@ -69,7 +72,8 @@ public class GameScreen implements Screen {
         ship = new Ship(shipRegion, planetRegion.getRegionHeight()/4);
         scoreFont = new BitmapFont(Gdx.files.internal("myfont.fnt"), true);
         overFont = new BitmapFont(Gdx.files.internal("myfont.fnt"), true);
-        mainMenu = new TextButton(new TextureRegion(new Texture("label_bg.png")), "Revenir au menu", Constants.WIDTH/2, Constants.HEIGHT/2, 2);
+        mainMenu = new TextButton(mainMenuRegion, "Revenir au menu", Constants.WIDTH/2, Constants.HEIGHT/2, 2);
+        mainMenuOver = new TextButton(mainMenuRegion, "Revenir au menu", Constants.WIDTH/2, Constants.HEIGHT-mainMenuRegion.getRegionHeight(), 2);
     }
 
     @Override
@@ -110,6 +114,7 @@ public class GameScreen implements Screen {
         }
         if(Constants.isOver()) {
             overFont.draw(game.batch, "Game Over", Constants.WIDTH/2-lineOverWidth/2, Constants.HEIGHT/2-lineOverHeight/2);
+            mainMenuOver.draw(game.batch);
         }
         game.batch.end();
 
@@ -122,7 +127,7 @@ public class GameScreen implements Screen {
 
     private void handleInput() {
         if(Constants.isPlaying()) {
-            if(right.isTouched(0) || right.isTouched(1)) {
+            if(right.isTouched(0) || right.isTouched(1) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 if(ship.x >= Constants.WIDTH-ship.getRegion().getRegionWidth()) {
                     ship.x = Constants.WIDTH-ship.getRegion().getRegionWidth();
                 }
@@ -130,7 +135,7 @@ public class GameScreen implements Screen {
                     ship.x += 10;
                 }
             }
-            if(left.isTouched(0) || left.isTouched(1)) {
+            if(left.isTouched(0) || left.isTouched(1) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 if(ship.x <= 0) {
                     ship.x = 0;
                 }
@@ -138,8 +143,13 @@ public class GameScreen implements Screen {
                     ship.x -= 10;
                 }
             }
-            if(shot.isTouched(0) || shot.isTouched(1)) {
+            if(shot.isTouched(0) || shot.isTouched(1) || Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
                 ship.launchMissile();
+            }
+        }
+        else if(Constants.isOver()) {
+            if(mainMenuOver.isClicked(0)) {
+                game.setScreen(new MenuScreen(game));
             }
         }
         else {
@@ -148,7 +158,7 @@ public class GameScreen implements Screen {
                 Constants.state = Constants.State.PLAY;
             }
         }
-        if(pauseButton.isClicked(0)) {
+        if(pauseButton.isClicked(0) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             switch (Constants.state) {
                 case PLAY:
                     Constants.state = Constants.State.PAUSE;

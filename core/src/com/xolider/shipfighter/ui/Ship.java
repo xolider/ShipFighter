@@ -27,6 +27,7 @@ public class Ship {
     private List<Meteor> meteors;
     private long lastSpawnMeteor = 0;
     private Random randomMeteor;
+    private Rectangle ship;
 
     long lastSpawn = 0;
 
@@ -43,6 +44,7 @@ public class Ship {
         randomMeteor = new Random();
         x = Constants.WIDTH/2-region.getRegionWidth()/2;
         y = Constants.HEIGHT-region.getRegionHeight()-decalY;
+        ship = new Rectangle(x, y, region.getRegionWidth(), region.getRegionHeight());
     }
 
     public void draw(SpriteBatch batch) {
@@ -64,7 +66,8 @@ public class Ship {
             Rectangle r = new Rectangle(m.x, m.y, missileTexture.getRegionWidth(), missileTexture.getRegionHeight());
             for(int i = 0; i < meteors.size(); i++) {
                 Meteor me = meteors.get(i);
-                if(r.overlaps(new Rectangle(me.getX(), me.getY(), me.getRegionWidth(), me.getRegionHeight()))) {
+                Rectangle mr = new Rectangle(me.getX(), me.getY(), me.getRegionWidth(), me.getRegionHeight());
+                if(r.overlaps(mr)) {
                     iter.remove();
                     meteors.remove(i);
                     score += 100;
@@ -93,6 +96,11 @@ public class Ship {
                 iter.remove();
             }
             else if(m.getX() >= 0 && m.getX() <= Constants.WIDTH && m.getY() >= Constants.HEIGHT-decal) {
+                Constants.state = Constants.State.OVER;
+            }
+            ship.set(x, y, region.getRegionWidth(), region.getRegionHeight());
+            Rectangle met = new Rectangle(m.getX(), m.getY(), m.getRegionWidth(), m.getRegionHeight());
+            if(ship.overlaps(met)) {
                 Constants.state = Constants.State.OVER;
             }
         }

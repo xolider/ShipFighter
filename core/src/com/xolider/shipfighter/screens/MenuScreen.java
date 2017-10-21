@@ -5,6 +5,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.xolider.shipfighter.ShipFighterGame;
 import com.xolider.shipfighter.ui.TextButton;
@@ -20,11 +22,14 @@ public class MenuScreen implements Screen {
     private OrthographicCamera camera;
     private TextureRegion bg;
     private TextButton textButton;
+    private BitmapFont title;
+    private float lineWidth, lineHeight;
 
     public MenuScreen(ShipFighterGame game) {
         this.game = game;
         bg = new TextureRegion(new Texture("space_bg.jpg"), Constants.WIDTH, Constants.HEIGHT);
         textButton = new TextButton(new TextureRegion(new Texture("label_bg.png")), "Jouer", Constants.WIDTH/2, Constants.HEIGHT/2,  3f);
+        title = new BitmapFont(Gdx.files.internal("myfont.fnt"), true);
         camera = new OrthographicCamera();
         camera.setToOrtho(true, Constants.WIDTH, Constants.HEIGHT);
         camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0);
@@ -33,6 +38,11 @@ public class MenuScreen implements Screen {
     @Override
     public void show() {
         bg.flip(false, true);
+        title.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        title.getData().scale(1.5f);
+        GlyphLayout layout = new GlyphLayout(title, Constants.TITLE);
+        lineWidth = layout.width;
+        lineHeight = layout.height;
     }
 
     @Override
@@ -48,6 +58,7 @@ public class MenuScreen implements Screen {
         game.batch.begin();
         game.batch.draw(bg, 0, 0);
         textButton.draw(game.batch);
+        title.draw(game.batch, Constants.TITLE, Constants.WIDTH/2-lineWidth/2, Constants.HEIGHT/4-lineHeight/2);
         game.batch.end();
     }
 
