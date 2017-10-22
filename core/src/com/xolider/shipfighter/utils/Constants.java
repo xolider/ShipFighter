@@ -1,6 +1,7 @@
 package com.xolider.shipfighter.utils;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 
 /**
  * Created by clement on 20/10/17.
@@ -25,5 +26,9 @@ public class Constants {
 
     public static boolean isOver() {
         return state == State.OVER;
+    }
+
+    public static Preferences getPreferences() {
+        return Gdx.app.getPreferences("ShipFighter");
     }
 }

@@ -13,3 +13,13 @@ public class Missile {
         this.y = y;
     }
 }
+
+class MissileExplode {
+
+    protected int x, y;
+
+    protected MissileExplode(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}

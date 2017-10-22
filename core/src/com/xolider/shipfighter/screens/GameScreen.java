@@ -3,6 +3,7 @@ package com.xolider.shipfighter.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -35,7 +36,6 @@ public class GameScreen implements Screen {
     private OrthographicCamera camera;
 
     private TextureRegion bg;
-    private TextureRegion meteorRegion;
     private Planet planet;
     private Button right;
     private Button left;
@@ -46,6 +46,7 @@ public class GameScreen implements Screen {
     private BitmapFont overFont;
     private float lineOverWidth, lineOverHeight;
     private TextButton mainMenuOver;
+    private TextButton mainMenuRestart;
 
     private Ship ship;
 
@@ -55,14 +56,15 @@ public class GameScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(true, Constants.WIDTH, Constants.HEIGHT);
         camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0);
+        Texture btnTexture = new Texture("label_bg.png");
         TextureRegion right_arrow = new TextureRegion(new Texture("right_arrow.png"));
         TextureRegion left_arrow = new TextureRegion(new Texture("left_arrow.png"));
         TextureRegion shipRegion = new TextureRegion(new Texture("spaceship.png"));
         TextureRegion shotRegion = new TextureRegion(new Texture("shot.png"));
         TextureRegion pauseRegion = new TextureRegion(new Texture("pause.png"));
         TextureRegion planetRegion = new TextureRegion(new Texture("planet.png"));
-        TextureRegion mainMenuRegion = new TextureRegion(new Texture("label_bg.png"));
-        meteorRegion = new TextureRegion(new Texture("meteor.png"));
+        TextureRegion mainMenuRegion = new TextureRegion(btnTexture);
+        TextureRegion mainMenuRestartRegion = new TextureRegion(btnTexture);
         planetRegion.flip(false, true);
         right = new Button(right_arrow, Constants.WIDTH-right_arrow.getRegionWidth()-30, Constants.HEIGHT-right_arrow.getRegionHeight()-30, 1);
         left = new Button(left_arrow, Constants.WIDTH-right_arrow.getRegionWidth()-left_arrow.getRegionWidth()-80, Constants.HEIGHT-left_arrow.getRegionHeight()-30, 1);
@@ -73,7 +75,8 @@ public class GameScreen implements Screen {
         scoreFont = new BitmapFont(Gdx.files.internal("myfont.fnt"), true);
         overFont = new BitmapFont(Gdx.files.internal("myfont.fnt"), true);
         mainMenu = new TextButton(mainMenuRegion, "Revenir au menu", Constants.WIDTH/2, Constants.HEIGHT/2, 2);
-        mainMenuOver = new TextButton(mainMenuRegion, "Revenir au menu", Constants.WIDTH/2, Constants.HEIGHT-mainMenuRegion.getRegionHeight(), 2);
+        mainMenuOver = new TextButton(mainMenuRegion, "Revenir au menu", (3*Constants.WIDTH)/4, Constants.HEIGHT-mainMenuRegion.getRegionHeight(), 2);
+        mainMenuRestart = new TextButton(mainMenuRestartRegion, "Rejouer", Constants.WIDTH/4, Constants.HEIGHT-mainMenuRestartRegion.getRegionHeight(), 2);
     }
 
     @Override
@@ -108,13 +111,16 @@ public class GameScreen implements Screen {
             shot.draw(game.batch);
             scoreFont.draw(game.batch, "Score: " + ship.score, 0, 0);
         }
-        pauseButton.draw(game.batch);
+        if(!Constants.isOver()) {
+            pauseButton.draw(game.batch);
+        }
         if(!Constants.isPlaying() && !Constants.isOver()) {
             mainMenu.draw(game.batch);
         }
         if(Constants.isOver()) {
             overFont.draw(game.batch, "Game Over", Constants.WIDTH/2-lineOverWidth/2, Constants.HEIGHT/2-lineOverHeight/2);
             mainMenuOver.draw(game.batch);
+            mainMenuRestart.draw(game.batch);
         }
         game.batch.end();
 
@@ -150,6 +156,10 @@ public class GameScreen implements Screen {
         else if(Constants.isOver()) {
             if(mainMenuOver.isClicked(0)) {
                 game.setScreen(new MenuScreen(game));
+            }
+            else if(mainMenuRestart.isClicked(0)) {
+                ship.restart();
+                Constants.state = Constants.State.PLAY;
             }
         }
         else {
