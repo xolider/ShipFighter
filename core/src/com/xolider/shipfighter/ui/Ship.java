@@ -25,7 +25,7 @@ public class Ship {
     private TextureRegion region;
     private TextureRegion missileTexture;
     private TextureRegion explodesRegion;
-    public int x, y, decalY;
+    public float x, y, decalY;
 
     private List<Missile> missiles;
     private List<Meteor> meteors;

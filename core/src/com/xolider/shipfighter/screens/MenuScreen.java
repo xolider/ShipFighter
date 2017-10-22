@@ -73,7 +73,7 @@ public class MenuScreen implements Screen {
         settingsSprite.draw(game.batch);
         game.batch.end();
 
-        settingsSprite.rotate(0.4f);
+        settingsSprite.rotate(50f*delta);
     }
 
     @Override

@@ -6,9 +6,9 @@ package com.xolider.shipfighter.ui;
 
 public class Missile {
 
-    protected int x, y;
+    protected float x, y;
 
-    protected Missile(int x, int y) {
+    protected Missile(float x, float y) {
         this.x = x;
         this.y = y;
     }
@@ -16,9 +16,9 @@ public class Missile {
 
 class MissileExplode {
 
-    protected int x, y;
+    protected float x, y;
 
-    protected MissileExplode(int x, int y) {
+    protected MissileExplode(float x, float y) {
         this.x = x;
         this.y = y;
     }

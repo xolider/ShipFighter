@@ -92,7 +92,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        handleInput();
+        handleInput(delta);
         if(Constants.isPlaying()) {
             ship.spawnMeteor();
         }
@@ -126,19 +126,19 @@ public class GameScreen implements Screen {
 
         if(Constants.isPlaying()) {
             ship.updateMissile(delta);
-            planet.rotate();
+            planet.rotate(delta);
             ship.updateMeteor(delta, planet.getRegionHeight()/4);
         }
     }
 
-    private void handleInput() {
+    private void handleInput(float delta) {
         if(Constants.isPlaying()) {
             if(right.isTouched(0) || right.isTouched(1) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 if(ship.x >= Constants.WIDTH-ship.getRegion().getRegionWidth()) {
                     ship.x = Constants.WIDTH-ship.getRegion().getRegionWidth();
                 }
                 else {
-                    ship.x += 10;
+                    ship.x += 700*delta;
                 }
             }
             if(left.isTouched(0) || left.isTouched(1) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
@@ -146,7 +146,7 @@ public class GameScreen implements Screen {
                     ship.x = 0;
                 }
                 else {
-                    ship.x -= 10;
+                    ship.x -= 700*delta;
                 }
             }
             if(shot.isTouched(0) || shot.isTouched(1) || Gdx.input.isKeyPressed(Input.Keys.SPACE)) {

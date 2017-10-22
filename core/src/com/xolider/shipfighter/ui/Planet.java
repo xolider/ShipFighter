@@ -12,7 +12,7 @@ import com.xolider.shipfighter.utils.Constants;
 public class Planet extends Sprite {
 
     private TextureRegion region;
-    private float rotateAngle = -0.2f;
+    private float rotateAngle = 12f;
     private float x;
     private float y;
 
@@ -29,7 +29,7 @@ public class Planet extends Sprite {
         super.draw(batch);
     }
 
-    public void rotate() {
-        this.rotate(rotateAngle);
+    public void rotate(float delta) {
+        this.setRotation(this.getRotation()-rotateAngle*delta);
     }
 }
