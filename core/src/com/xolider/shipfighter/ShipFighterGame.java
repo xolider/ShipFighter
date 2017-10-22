@@ -15,7 +15,7 @@ public class ShipFighterGame extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-        this.setScreen(new SplashScreen(this));
+		this.setScreen(new SplashScreen(this));
 		Timer timer = new Timer();
 		timer.scheduleTask(new Timer.Task() {
 			@Override
