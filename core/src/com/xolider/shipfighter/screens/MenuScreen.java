@@ -24,6 +24,7 @@ public class MenuScreen implements Screen {
     private OrthographicCamera camera;
     private TextureRegion bg;
     private TextButton textButton;
+    private TextButton quitButton;
     private Button settings;
     private BitmapFont title;
     private Sprite settingsSprite;
@@ -32,7 +33,9 @@ public class MenuScreen implements Screen {
     public MenuScreen(ShipFighterGame game) {
         this.game = game;
         bg = new TextureRegion(new Texture("space_bg.jpg"), Constants.WIDTH, Constants.HEIGHT);
-        textButton = new TextButton(new TextureRegion(new Texture("label_bg.png")), "Jouer", Constants.WIDTH/2, Constants.HEIGHT/2,  3f);
+        TextureRegion btnBg = new TextureRegion(new Texture("label_bg.png"));
+        textButton = new TextButton(btnBg, "Jouer", Constants.WIDTH/2, (3*Constants.HEIGHT)/6,  3f);
+        quitButton = new TextButton(btnBg, "Quitter", Constants.WIDTH/2, (5*Constants.HEIGHT)/6, 3f);
         TextureRegion settingsRegion = new TextureRegion(new Texture("settings.png"));
         settings = new Button(settingsRegion, Constants.WIDTH-settingsRegion.getRegionWidth()-10, 10, 1);
         title = new BitmapFont(Gdx.files.internal("myfont.fnt"), true);
@@ -58,6 +61,9 @@ public class MenuScreen implements Screen {
         if(textButton.isClicked(0)) {
             game.setScreen(new GameScreen(game));
         }
+        if(quitButton.isClicked(0)) {
+            Gdx.app.exit();
+        }
         if(settings.isClicked(0)) {
             game.setScreen(new SettingsScreen(game));
         }
@@ -69,7 +75,8 @@ public class MenuScreen implements Screen {
         game.batch.begin();
         game.batch.draw(bg, 0, 0);
         textButton.draw(game.batch);
-        title.draw(game.batch, Constants.TITLE, Constants.WIDTH/2-lineWidth/2, Constants.HEIGHT/4-lineHeight/2);
+        quitButton.draw(game.batch);
+        title.draw(game.batch, Constants.TITLE, Constants.WIDTH/2-lineWidth/2, Constants.HEIGHT/6-lineHeight/2);
         settingsSprite.draw(game.batch);
         game.batch.end();
 

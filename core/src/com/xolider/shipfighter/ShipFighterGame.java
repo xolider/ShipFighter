@@ -13,7 +13,7 @@ public class ShipFighterGame extends Game {
 	public SpriteBatch batch;
 	
 	@Override
-	public void create () {
+	public void create() {
 		batch = new SpriteBatch();
 		this.setScreen(new SplashScreen(this));
 		Timer timer = new Timer();

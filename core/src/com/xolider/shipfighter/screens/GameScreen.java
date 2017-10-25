@@ -66,9 +66,9 @@ public class GameScreen implements Screen {
         TextureRegion mainMenuRegion = new TextureRegion(btnTexture);
         TextureRegion mainMenuRestartRegion = new TextureRegion(btnTexture);
         planetRegion.flip(false, true);
-        right = new Button(right_arrow, (7*Constants.WIDTH)/8+right_arrow.getRegionWidth()/2+15, Constants.HEIGHT-right_arrow.getRegionHeight()-30, 1);
-        left = new Button(left_arrow, (7*Constants.WIDTH)/8-left_arrow.getRegionWidth()/2-15, Constants.HEIGHT-left_arrow.getRegionHeight()-30, 1);
-        shot = new Button(shotRegion, Constants.WIDTH/8, Constants.HEIGHT-shotRegion.getRegionHeight()-30, 1);
+        right = new Button(right_arrow, (7*Constants.WIDTH)/8+right_arrow.getRegionWidth()/2, Constants.HEIGHT-right_arrow.getRegionHeight()-30, 1.5f);
+        left = new Button(left_arrow, (6.5f*Constants.WIDTH)/8-left_arrow.getRegionWidth()/2, Constants.HEIGHT-left_arrow.getRegionHeight()-30, 1.5f);
+        shot = new Button(shotRegion, Constants.WIDTH/8, Constants.HEIGHT-shotRegion.getRegionHeight()-30, 1.5f);
         pauseButton = new Button(pauseRegion, Constants.WIDTH-pauseRegion.getRegionWidth(), 0, 0.7f);
         planet = new Planet(planetRegion);
         ship = new Ship(shipRegion, planetRegion.getRegionHeight()/4);

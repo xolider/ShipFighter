@@ -91,7 +91,7 @@ public class Ship {
                 if(r.overlaps(mr)) {
                     iter.remove();
                     me.addHit();
-                    explodes.add(new MissileExplode(m.x, m.y));
+                    explodes.add(new MissileExplode(m.x-explodesRegion.getRegionWidth()/2, m.y));
                     if(me.getHits() == me.getLevel()) {
                         meteors.remove(i);
                         score += me.getLevel()*100;
@@ -113,12 +113,12 @@ public class Ship {
         }
     }
 
-    public void updateMeteor(float delta, float decal) {
+    public void updateMeteor(float delta, float decal) { //decal == 1/4 of planet texture
         Iterator<Meteor> iter = meteors.iterator();
         while(iter.hasNext()) {
             Meteor m = iter.next();
             m.updateMeteor(delta);
-            if((m.getX() >= Constants.WIDTH && m.getY() <= Constants.HEIGHT-decal) || (m.getX() <= 0 && m.getY() <= Constants.HEIGHT-decal)) {
+            if((m.getX() >= Constants.WIDTH && m.getY() <= Constants.HEIGHT-decal) || (m.getX() <= 0-regions[m.getLevel()-1].getRegionWidth() && m.getY() <= Constants.HEIGHT-decal)) {
                 iter.remove();
             }
             else if(m.getX() >= 0 && m.getX() <= Constants.WIDTH && m.getY() >= Constants.HEIGHT-decal) {
