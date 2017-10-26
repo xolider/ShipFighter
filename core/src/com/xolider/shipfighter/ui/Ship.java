@@ -184,6 +184,7 @@ public class Ship {
         missiles.clear();
         meteors.clear();
         score = 0;
+        ammo = 50;
     }
 
     public TextureRegion getRegion() {

@@ -20,11 +20,11 @@ public class Button {
 
     public Button(TextureRegion t, float x, float y, float scale) {
         this.t = t;
-        this.x = x;
-        this.y = y;
         this.scale = scale;
         this.width = t.getRegionWidth()*this.scale;
         this.height = t.getRegionHeight()*this.scale;
+        this.x = x;
+        this.y = y;
         this.t.flip(false, true);
         this.t.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
     }

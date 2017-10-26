@@ -15,7 +15,7 @@ public class Meteor extends Sprite {
 
     private TextureRegion region;
     private int xTranslate, yTranslate, minXTranslate = -100, maxXTranslate = 100, minYTranslate = 100, maxYTranslate = 300, level;
-    private float rotateAngle, minAngle = 0.1f, maxAngle = 1f;
+    private float rotateAngle, minAngle = 1f, maxAngle = 3f;
     private int hit;
 
     public Meteor(TextureRegion region, int x, int y, int level) {
