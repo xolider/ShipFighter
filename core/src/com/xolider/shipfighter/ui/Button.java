@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
+import com.xolider.shipfighter.utils.Constants;
 
 /**
  * Created by clement on 20/10/17.
@@ -22,8 +23,8 @@ public class Button {
         this.x = x;
         this.y = y;
         this.scale = scale;
-        this.width = t.getRegionWidth()*scale;
-        this.height = t.getRegionHeight()*scale;
+        this.width = t.getRegionWidth()*this.scale;
+        this.height = t.getRegionHeight()*this.scale;
         this.t.flip(false, true);
         this.t.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
     }

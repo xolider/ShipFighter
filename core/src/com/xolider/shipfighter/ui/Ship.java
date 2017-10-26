@@ -104,7 +104,7 @@ public class Ship {
     public void launchMissile() {
         if(lastSpawn == 0 || System.nanoTime() - lastSpawn >= 200000000) {
             lastSpawn = System.nanoTime();
-            Missile missile = new Missile(this.x + this.region.getRegionWidth()/2-10, Constants.HEIGHT - this.region.getRegionHeight()-decalY);
+            Missile missile = new Missile(this.x + this.region.getRegionWidth()/2-this.missileTexture.getRegionWidth()/2, Constants.HEIGHT - this.region.getRegionHeight()-decalY);
             missiles.add(missile);
             missileSound.play();
         }
@@ -138,7 +138,7 @@ public class Ship {
         if(lastSpawnMeteor == 0 || System.nanoTime() - lastSpawnMeteor >= 2000000000) {
             lastSpawnMeteor = System.nanoTime();
             int level = lvlMeteor.nextInt(2);
-            Meteor meteor = new Meteor(regions[level], randomMeteor.nextInt(Constants.WIDTH), randomMeteor.nextInt(Constants.HEIGHT/2)*(-1), level+1);
+            Meteor meteor = new Meteor(regions[level], randomMeteor.nextInt(Constants.WIDTH), (randomMeteor.nextInt(Constants.HEIGHT/2)+Constants.HEIGHT/2)*(-1), level+1);
             meteors.add(meteor);
         }
     }
