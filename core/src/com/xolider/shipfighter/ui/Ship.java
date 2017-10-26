@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.loaders.SoundLoader;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -25,6 +27,7 @@ public class Ship {
     private TextureRegion region;
     private TextureRegion missileTexture;
     private TextureRegion explodesRegion;
+    private TextureRegion loaderRegion;
     public float x, y, decalY;
 
     private List<Missile> missiles;
@@ -39,12 +42,22 @@ public class Ship {
     private Texture meteor2 = new Texture("meteor2.png");
     private TextureRegion[] regions = {new TextureRegion(meteor1), new TextureRegion(meteor2)};
 
+    private BitmapFont reloadingFont;
+    private String reloading = "Reloading...";
+    private float rldFontWidth;
+    private float rldFontHeight;
+
+    private BitmapFont ammoFont;
+
     private Sound missileSound;
     private Sound overSound;
 
     long lastSpawn = 0;
 
     public int score = 0;
+    public int ammo;
+    private float ammoReload = 2000000000, lastAmmo;
+    private GlyphLayout ammoLayout;
 
     public Ship(TextureRegion region, int decalY) {
         this.region = region;
@@ -52,16 +65,25 @@ public class Ship {
         this.decalY = decalY;
         missileTexture = new TextureRegion(new Texture("missile.png"));
         explodesRegion = new TextureRegion(new Texture("missile_explode.png"));
+        loaderRegion = new TextureRegion(new Texture("loader.png"));
+        loaderRegion.flip(false, true);
         missiles = new ArrayList<Missile>();
         meteors = new ArrayList<Meteor>();
         explodes = new ArrayList<MissileExplode>();
         randomMeteor = new Random();
         lvlMeteor = new Random();
+        reloadingFont = new BitmapFont(Gdx.files.internal("myfont.fnt"), true);
+        GlyphLayout layout = new GlyphLayout(reloadingFont, reloading);
+        rldFontWidth = layout.width;
+        rldFontHeight = layout.height;
+        ammoFont = new BitmapFont(Gdx.files.internal("myfont.fnt"), true);
+        ammoLayout = new GlyphLayout(ammoFont, "" + ammo);
         x = Constants.WIDTH/2-region.getRegionWidth()/2;
         y = Constants.HEIGHT-region.getRegionHeight()-decalY;
         ship = new Rectangle(x, y, region.getRegionWidth(), region.getRegionHeight());
         missileSound = Gdx.audio.newSound(Gdx.files.internal("missile_sound.ogg"));
         overSound = Gdx.audio.newSound(Gdx.files.internal("game_over.ogg"));
+        ammo = 50;
     }
 
     public void draw(SpriteBatch batch) {
@@ -75,6 +97,14 @@ public class Ship {
         for(int i = 0; i < explodes.size(); i++) {
             batch.draw(explodesRegion, explodes.get(i).x, explodes.get(i).y);
             explodes.remove(i);
+        }
+        batch.draw(loaderRegion, Constants.WIDTH-loaderRegion.getRegionWidth()*1.5f, Constants.HEIGHT/2-(loaderRegion.getRegionHeight()*1.5f)/2, loaderRegion.getRegionWidth()*1.5f, loaderRegion.getRegionHeight()*1.5f);
+        ammoLayout.setText(ammoFont, "" + ammo);
+        float w = ammoLayout.width;
+        float h = ammoLayout.height;
+        ammoFont.draw(batch, "" + ammo, Constants.WIDTH-loaderRegion.getRegionWidth()*1.5f-w, Constants.HEIGHT/2-h/2);
+        if(ammo == 0) {
+            reloadingFont.draw(batch, reloading, Constants.WIDTH/2-rldFontWidth/2, Constants.HEIGHT-rldFontHeight*3);
         }
     }
 
@@ -99,14 +129,21 @@ public class Ship {
                 }
             }
         }
+        if(System.nanoTime() - lastAmmo >= ammoReload && ammo == 0) {
+            ammo = 50;
+        }
     }
 
     public void launchMissile() {
-        if(lastSpawn == 0 || System.nanoTime() - lastSpawn >= 200000000) {
+        if((lastSpawn == 0 || System.nanoTime() - lastSpawn >= 200000000) && ammo != 0) {
             lastSpawn = System.nanoTime();
-            Missile missile = new Missile(this.x + this.region.getRegionWidth()/2-this.missileTexture.getRegionWidth()/2, Constants.HEIGHT - this.region.getRegionHeight()-decalY);
+            Missile missile = new Missile(this.x + this.region.getRegionWidth()/2-10, Constants.HEIGHT - this.region.getRegionHeight()-decalY);
             missiles.add(missile);
             missileSound.play();
+            ammo--;
+            if(ammo == 0) {
+                lastAmmo = System.nanoTime();
+            }
         }
         else {
             return;
@@ -138,7 +175,7 @@ public class Ship {
         if(lastSpawnMeteor == 0 || System.nanoTime() - lastSpawnMeteor >= 2000000000) {
             lastSpawnMeteor = System.nanoTime();
             int level = lvlMeteor.nextInt(2);
-            Meteor meteor = new Meteor(regions[level], randomMeteor.nextInt(Constants.WIDTH), (randomMeteor.nextInt(Constants.HEIGHT/2)+Constants.HEIGHT/2)*(-1), level+1);
+            Meteor meteor = new Meteor(regions[level], randomMeteor.nextInt(Constants.WIDTH), randomMeteor.nextInt(Constants.HEIGHT/2)*(-1), level+1);
             meteors.add(meteor);
         }
     }
