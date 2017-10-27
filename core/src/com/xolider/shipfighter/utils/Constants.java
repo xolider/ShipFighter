@@ -21,6 +21,8 @@ public class Constants {
     public static boolean isDesktop = false;
     public static final String TITLE = "ShipFighter";
 
+    private static final Preferences PREFERENCES = Gdx.app.getPreferences("ShipFighter");
+
     public static boolean isPlaying() {
         return state == State.PLAY;
     }
@@ -30,6 +32,6 @@ public class Constants {
     }
 
     public static Preferences getPreferences() {
-        return Gdx.app.getPreferences("ShipFighter");
+        return PREFERENCES;
     }
 }
