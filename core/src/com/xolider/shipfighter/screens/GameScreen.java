@@ -97,7 +97,7 @@ public class GameScreen implements Screen {
         if(Constants.isPlaying()) {
             planet.draw(game.batch);
             ship.draw(game.batch);
-            if(!Constants.isDesktop) {
+            if(!Constants.isDesktop && Constants.getPreferences().getBoolean("showHUD", true)) {
                 right.draw(game.batch);
                 left.draw(game.batch);
                 shot.draw(game.batch);

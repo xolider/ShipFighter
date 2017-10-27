@@ -64,6 +64,7 @@ public class Ship {
         this.region.flip(false, true);
         this.decalY = decalY;
         missileTexture = new TextureRegion(new Texture("missile.png"));
+        missileTexture.flip(false, true);
         explodesRegion = new TextureRegion(new Texture("missile_explode.png"));
         loaderRegion = new TextureRegion(new Texture("loader.png"));
         loaderRegion.flip(false, true);
@@ -104,7 +105,7 @@ public class Ship {
         float h = ammoLayout.height;
         ammoFont.draw(batch, "" + ammo, Constants.WIDTH-loaderRegion.getRegionWidth()*1.5f-w, Constants.HEIGHT/2-h/2);
         if(ammo == 0) {
-            reloadingFont.draw(batch, reloading, Constants.WIDTH/2-rldFontWidth/2, Constants.HEIGHT-rldFontHeight*3);
+            reloadingFont.draw(batch, reloading, x+region.getRegionWidth(), y+region.getRegionHeight()/2);
         }
     }
 
@@ -113,7 +114,10 @@ public class Ship {
         while(iter.hasNext()) {
             Missile m = iter.next();
             m.y -= 800*delta;
-            if(m.y <= 0) iter.remove();
+            if(m.y <= 0) {
+                iter.remove();
+                return;
+            }
             Rectangle r = new Rectangle(m.x, m.y, missileTexture.getRegionWidth(), missileTexture.getRegionHeight());
             for(int i = 0; i < meteors.size(); i++) {
                 Meteor me = meteors.get(i);

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.xolider.shipfighter.ShipFighterGame;
 import com.xolider.shipfighter.ui.Button;
+import com.xolider.shipfighter.utils.CheckboxSetting;
 import com.xolider.shipfighter.utils.Constants;
 
 /**
@@ -20,12 +21,18 @@ public class SettingsScreen implements Screen {
     private OrthographicCamera camera;
     private Button returnBtn;
 
+    private CheckboxSetting showHUD;
+
     public SettingsScreen(ShipFighterGame game) {
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(true, Constants.WIDTH, Constants.HEIGHT);
         camera.position.set(Constants.WIDTH/2, Constants.HEIGHT/2, 0);
         returnBtn = new Button(new TextureRegion(new Texture("left_arrow.png")), 10, 10, 1);
+
+        showHUD = new CheckboxSetting("Show HUD");
+        showHUD.setPosition(Constants.WIDTH/2-showHUD.getTotalWidth()/2, Constants.HEIGHT/2-showHUD.getTotalHeight()/2);
+        showHUD.setChecked(Constants.getPreferences().getBoolean("showHUD", true));
     }
 
     @Override
@@ -43,12 +50,18 @@ public class SettingsScreen implements Screen {
 
         game.batch.begin();
         returnBtn.draw(game.batch);
+        showHUD.draw(game.batch);
         game.batch.end();
     }
 
     private void handleEvent() {
         if(returnBtn.isClicked(0)) {
             game.setScreen(new MenuScreen(game));
+        }
+        if(showHUD.isClicked(0)) {
+            Constants.getPreferences().putBoolean("showHUD", !showHUD.isChecked());
+            Constants.getPreferences().flush();
+            showHUD.setChecked(!showHUD.isChecked());
         }
     }
 
