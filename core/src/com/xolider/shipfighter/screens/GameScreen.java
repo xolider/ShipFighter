@@ -3,7 +3,6 @@ package com.xolider.shipfighter.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -11,20 +10,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Align;
 import com.xolider.shipfighter.ShipFighterGame;
 import com.xolider.shipfighter.ui.Button;
-import com.xolider.shipfighter.ui.Meteor;
 import com.xolider.shipfighter.ui.Planet;
 import com.xolider.shipfighter.ui.Ship;
 import com.xolider.shipfighter.ui.TextButton;
 import com.xolider.shipfighter.utils.Constants;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
 
 /**
  * Created by clement on 20/10/17.
@@ -106,9 +97,11 @@ public class GameScreen implements Screen {
         if(Constants.isPlaying()) {
             planet.draw(game.batch);
             ship.draw(game.batch);
-            right.draw(game.batch);
-            left.draw(game.batch);
-            shot.draw(game.batch);
+            if(!Constants.isDesktop) {
+                right.draw(game.batch);
+                left.draw(game.batch);
+                shot.draw(game.batch);
+            }
             scoreFont.draw(game.batch, "Score: " + ship.score, 0, 0);
         }
         if(!Constants.isOver()) {

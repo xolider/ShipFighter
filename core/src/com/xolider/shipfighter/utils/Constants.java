@@ -18,6 +18,7 @@ public class Constants {
     public static final int WIDTH = Gdx.graphics.getWidth();
     public static final int HEIGHT = Gdx.graphics.getHeight();
     public static State state = State.PLAY;
+    public static boolean isDesktop = false;
     public static final String TITLE = "ShipFighter";
 
     public static boolean isPlaying() {

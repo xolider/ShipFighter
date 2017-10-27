@@ -3,10 +3,8 @@ package com.xolider.shipfighter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Timer;
-import com.xolider.shipfighter.screens.GameScreen;
 import com.xolider.shipfighter.screens.MenuScreen;
 import com.xolider.shipfighter.screens.SplashScreen;
-import com.xolider.shipfighter.utils.Constants;
 
 public class ShipFighterGame extends Game {
 
