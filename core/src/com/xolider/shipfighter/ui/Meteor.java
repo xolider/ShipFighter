@@ -15,7 +15,7 @@ public class Meteor extends Sprite {
 
     private TextureRegion region;
     private int xTranslate, yTranslate, minXTranslate = -100, maxXTranslate = 100, minYTranslate = 100, maxYTranslate = 300, level;
-    private float rotateAngle, minAngle = 1f, maxAngle = 3f;
+    private float rotateAngle, minAngle = 40f, maxAngle = 80f;
     private int hit;
 
     public Meteor(TextureRegion region, int x, int y, int level) {
@@ -34,13 +34,13 @@ public class Meteor extends Sprite {
         super.draw(batch);
     }
 
-    public void rotate() {
-        this.rotate(rotateAngle);
+    public void rotate(float delta) {
+        this.setRotation(this.getRotation()+rotateAngle*delta);
     }
 
     public void updateMeteor(float delta) {
         this.setPosition(super.getX() + xTranslate*delta, super.getY() + yTranslate*delta);
-        rotate();
+        rotate(delta);
     }
 
     public int getLevel() {

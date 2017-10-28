@@ -9,6 +9,7 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "ShipFighter";
 		config.fullscreen = true;
+		config.vSyncEnabled = true;
 		new LwjglApplication(new ShipFighterGame(), config);
 	}
 }
