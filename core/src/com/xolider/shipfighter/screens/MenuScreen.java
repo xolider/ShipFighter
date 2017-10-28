@@ -34,8 +34,8 @@ public class MenuScreen implements Screen {
         this.game = game;
         bg = new TextureRegion(new Texture("space_bg.jpg"), Constants.WIDTH, Constants.HEIGHT);
         TextureRegion btnBg = new TextureRegion(new Texture("label_bg.png"));
-        textButton = new TextButton(btnBg, "Jouer", Constants.WIDTH/2, (3*Constants.HEIGHT)/6,  3f);
-        quitButton = new TextButton(btnBg, "Quitter", Constants.WIDTH/2, (5*Constants.HEIGHT)/6, 3f);
+        textButton = new TextButton(btnBg, "Play", Constants.WIDTH/2, (3*Constants.HEIGHT)/6,  3f);
+        quitButton = new TextButton(btnBg, "Quit", Constants.WIDTH/2, (5*Constants.HEIGHT)/6, 3f);
         TextureRegion settingsRegion = new TextureRegion(new Texture("settings.png"));
         settings = new Button(settingsRegion, Constants.WIDTH-settingsRegion.getRegionWidth()-10, 10, 1);
         title = new BitmapFont(Gdx.files.internal("myfont.fnt"), true);

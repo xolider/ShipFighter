@@ -65,9 +65,9 @@ public class GameScreen implements Screen {
         ship = new Ship(shipRegion, planetRegion.getRegionHeight()/4);
         scoreFont = new BitmapFont(Gdx.files.internal("myfont.fnt"), true);
         overFont = new BitmapFont(Gdx.files.internal("myfont.fnt"), true);
-        mainMenu = new TextButton(mainMenuRegion, "Revenir au menu", Constants.WIDTH/2, Constants.HEIGHT/2, 2);
-        mainMenuOver = new TextButton(mainMenuRegion, "Revenir au menu", (3*Constants.WIDTH)/4, Constants.HEIGHT-mainMenuRegion.getRegionHeight(), 2);
-        mainMenuRestart = new TextButton(mainMenuRestartRegion, "Rejouer", Constants.WIDTH/4, Constants.HEIGHT-mainMenuRestartRegion.getRegionHeight(), 2);
+        mainMenu = new TextButton(mainMenuRegion, "Back to menu", Constants.WIDTH/2, Constants.HEIGHT/2, 2);
+        mainMenuOver = new TextButton(mainMenuRegion, "Back to menu", (3*Constants.WIDTH)/4, Constants.HEIGHT-mainMenuRegion.getRegionHeight(), 2);
+        mainMenuRestart = new TextButton(mainMenuRestartRegion, "Retry", Constants.WIDTH/4, Constants.HEIGHT-mainMenuRestartRegion.getRegionHeight(), 2);
     }
 
     @Override
