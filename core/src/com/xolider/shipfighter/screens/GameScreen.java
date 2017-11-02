@@ -86,6 +86,7 @@ public class GameScreen implements Screen {
         handleInput(delta);
         if(Constants.isPlaying()) {
             ship.spawnMeteor();
+            ship.createMissileUp();
         }
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
@@ -121,6 +122,7 @@ public class GameScreen implements Screen {
             ship.updateMissile(delta);
             planet.rotate(delta);
             ship.updateMeteor(delta, planet.getRegionHeight()/4);
+            ship.updateMissileUp(delta);
         }
     }
 

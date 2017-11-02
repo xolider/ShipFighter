@@ -14,7 +14,7 @@ import java.util.Random;
 public class Meteor extends Sprite {
 
     private TextureRegion region;
-    private int xTranslate, yTranslate, minXTranslate = -100, maxXTranslate = 100, minYTranslate = 100, maxYTranslate = 300, level;
+    protected int xTranslate, yTranslate, minXTranslate = -100, maxXTranslate = 100, minYTranslate = 100, maxYTranslate = 300, level;
     private float rotateAngle, minAngle = 40f, maxAngle = 80f;
     private int hit;
 

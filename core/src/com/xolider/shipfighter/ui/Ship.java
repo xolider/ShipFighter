@@ -6,9 +6,11 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.xolider.shipfighter.utils.Constants;
@@ -16,6 +18,7 @@ import com.xolider.shipfighter.utils.Constants;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -29,14 +32,15 @@ public class Ship {
     private TextureRegion explodesRegion;
     private TextureRegion loaderRegion;
     public float x, y, decalY;
+    private boolean isMissileUp;
 
     private List<Missile> missiles;
     private List<Meteor> meteors;
     private List<MissileExplode> explodes;
     private long lastSpawnMeteor = 0;
-    private Random randomMeteor;
     private Rectangle ship;
-    private Random lvlMeteor;
+
+    private MissileUp missileUp = null;
 
     private Texture meteor1 = new Texture("meteor1.png");
     private Texture meteor2 = new Texture("meteor2.png");
@@ -44,8 +48,6 @@ public class Ship {
 
     private BitmapFont reloadingFont;
     private String reloading = "Reloading...";
-    private float rldFontWidth;
-    private float rldFontHeight;
 
     private BitmapFont ammoFont;
 
@@ -71,12 +73,7 @@ public class Ship {
         missiles = new ArrayList<Missile>();
         meteors = new ArrayList<Meteor>();
         explodes = new ArrayList<MissileExplode>();
-        randomMeteor = new Random();
-        lvlMeteor = new Random();
         reloadingFont = new BitmapFont(Gdx.files.internal("myfont.fnt"), true);
-        GlyphLayout layout = new GlyphLayout(reloadingFont, reloading);
-        rldFontWidth = layout.width;
-        rldFontHeight = layout.height;
         ammoFont = new BitmapFont(Gdx.files.internal("myfont.fnt"), true);
         ammoLayout = new GlyphLayout(ammoFont, "" + ammo);
         x = Constants.WIDTH/2-region.getRegionWidth()/2;
@@ -85,6 +82,7 @@ public class Ship {
         missileSound = Gdx.audio.newSound(Gdx.files.internal("missile_sound.ogg"));
         overSound = Gdx.audio.newSound(Gdx.files.internal("game_over.ogg"));
         ammo = 50;
+        isMissileUp = false;
     }
 
     public void draw(SpriteBatch batch) {
@@ -104,8 +102,11 @@ public class Ship {
         float w = ammoLayout.width;
         float h = ammoLayout.height;
         ammoFont.draw(batch, "" + ammo, Constants.WIDTH-loaderRegion.getRegionWidth()*1.5f-w, Constants.HEIGHT/2-h/2);
-        if(ammo == 0) {
+        if(ammo <= 0) {
             reloadingFont.draw(batch, reloading, x+region.getRegionWidth(), y+region.getRegionHeight()/2);
+        }
+        if(missileUp != null) {
+            batch.draw(missileUp.getTextureregion(), missileUp.x, missileUp.y);
         }
     }
 
@@ -133,21 +134,31 @@ public class Ship {
                 }
             }
         }
-        if(System.nanoTime() - lastAmmo >= ammoReload && ammo == 0) {
+        if(System.nanoTime() - lastAmmo >= ammoReload && ammo <= 0) {
             ammo = 50;
+            isMissileUp = false;
         }
     }
 
     public void launchMissile() {
-        if((lastSpawn == 0 || System.nanoTime() - lastSpawn >= 200000000) && ammo != 0) {
+        if((lastSpawn == 0 || System.nanoTime() - lastSpawn >= 200000000) && ammo > 0) {
             lastSpawn = System.nanoTime();
-            Missile missile = new Missile(this.x + this.region.getRegionWidth()/2-10, Constants.HEIGHT - this.region.getRegionHeight()-decalY);
-            missiles.add(missile);
-            missileSound.play();
-            ammo--;
-            if(ammo == 0) {
+            if(!isMissileUp) {
+                Missile missile = new Missile(this.x + this.region.getRegionWidth()/2-missileTexture.getRegionWidth()/2, Constants.HEIGHT - this.region.getRegionHeight()-decalY);
+                missiles.add(missile);
+                ammo--;
+            }
+            else {
+                Missile missile = new Missile(this.x, Constants.HEIGHT-this.region.getRegionHeight()-decalY);
+                Missile missile1 = new Missile(this.x + this.region.getRegionWidth()-missileTexture.getRegionWidth(), Constants.HEIGHT-this.region.getRegionHeight()-decalY);
+                missiles.add(missile);
+                missiles.add(missile1);
+                ammo -= 2;
+            }
+            if(ammo <= 0) {
                 lastAmmo = System.nanoTime();
             }
+            missileSound.play();
         }
         else {
             return;
@@ -178,8 +189,8 @@ public class Ship {
     public void spawnMeteor() {
         if(lastSpawnMeteor == 0 || System.nanoTime() - lastSpawnMeteor >= 2000000000) {
             lastSpawnMeteor = System.nanoTime();
-            int level = lvlMeteor.nextInt(2);
-            Meteor meteor = new Meteor(regions[level], randomMeteor.nextInt(Constants.WIDTH), randomMeteor.nextInt(Constants.HEIGHT/2)*(-1), level+1);
+            int level = MathUtils.random(1);
+            Meteor meteor = new Meteor(regions[level], MathUtils.random(Constants.WIDTH), MathUtils.random(Constants.HEIGHT/2)*(-1), level+1);
             meteors.add(meteor);
         }
     }
@@ -189,6 +200,29 @@ public class Ship {
         meteors.clear();
         score = 0;
         ammo = 50;
+        isMissileUp = false;
+    }
+
+    public void createMissileUp() {
+        int i = MathUtils.random(100);
+        if(i <= 2  && missileUp == null && !isMissileUp) {
+            float spawn = MathUtils.random(Constants.WIDTH);
+            missileUp = new MissileUp(spawn, (Constants.HEIGHT/2)*(-1));
+        }
+    }
+
+    public void updateMissileUp(float delta) {
+        if(missileUp != null) {
+            missileUp.y += 500*delta;
+            Rectangle mup = new Rectangle(missileUp.x, missileUp.y, missileUp.getTextureregion().getRegionWidth(), missileUp.getTextureregion().getRegionHeight());
+            if(ship.overlaps(mup)) {
+                isMissileUp = true;
+                missileUp = null;
+            }
+            if(missileUp != null && missileUp.y >= Constants.HEIGHT) {
+                missileUp = null;
+            }
+        }
     }
 
     public TextureRegion getRegion() {
