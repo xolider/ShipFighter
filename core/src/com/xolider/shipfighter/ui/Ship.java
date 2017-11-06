@@ -103,7 +103,7 @@ public class Ship {
         float h = ammoLayout.height;
         ammoFont.draw(batch, "" + ammo, Constants.WIDTH-loaderRegion.getRegionWidth()*1.5f-w, Constants.HEIGHT/2-h/2);
         if(ammo <= 0) {
-            reloadingFont.draw(batch, reloading, x+region.getRegionWidth(), y+region.getRegionHeight()/2);
+            reloadingFont.draw(batch, reloading, x+region.getRegionWidth()+10, y+region.getRegionHeight()/2);
         }
         if(missileUp != null) {
             batch.draw(missileUp.getTextureregion(), missileUp.x, missileUp.y);
@@ -205,7 +205,7 @@ public class Ship {
 
     public void createMissileUp() {
         int i = MathUtils.random(100);
-        if(i <= 2  && missileUp == null && !isMissileUp) {
+        if(i == 1  && missileUp == null && !isMissileUp) {
             float spawn = MathUtils.random(Constants.WIDTH);
             missileUp = new MissileUp(spawn, (Constants.HEIGHT/2)*(-1));
         }
