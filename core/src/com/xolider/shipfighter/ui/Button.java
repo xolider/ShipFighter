@@ -31,8 +31,8 @@ public class Button {
 
     public boolean isTouched(int index) {
         if(Gdx.input.isTouched(index)) {
-            int x = Gdx.input.getX(index);
-            int y = Gdx.input.getY(index);
+            double x = Gdx.input.getX(index)/((double)Gdx.graphics.getWidth()/Constants.WIDTH);
+            double y = Gdx.input.getY(index)/((double)Gdx.graphics.getHeight()/Constants.HEIGHT);
             if(x > this.x && x < this.x + width && y > this.y && y < this.y + height) {
                 return true;
             }

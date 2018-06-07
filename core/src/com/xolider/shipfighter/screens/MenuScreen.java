@@ -2,6 +2,7 @@ package com.xolider.shipfighter.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -32,18 +33,18 @@ public class MenuScreen implements Screen {
 
     public MenuScreen(ShipFighterGame game) {
         this.game = game;
-        bg = new TextureRegion(new Texture("space_bg.jpg"), Constants.WIDTH, Constants.HEIGHT);
-        TextureRegion btnBg = new TextureRegion(new Texture("label_bg.png"));
-        textButton = new TextButton(btnBg, "Play", Constants.WIDTH/2, (3*Constants.HEIGHT)/6,  3f);
-        quitButton = new TextButton(btnBg, "Quit", Constants.WIDTH/2, (5*Constants.HEIGHT)/6, 3f);
-        TextureRegion settingsRegion = new TextureRegion(new Texture("settings.png"));
-        settings = new Button(settingsRegion, Constants.WIDTH-settingsRegion.getRegionWidth()-10, 10, 1);
-        title = new BitmapFont(Gdx.files.internal("myfont.fnt"), true);
-        settingsSprite = new Sprite(settingsRegion);
-        settingsSprite.setPosition(Constants.WIDTH-settingsRegion.getRegionWidth()-10, 10);
         camera = new OrthographicCamera();
         camera.setToOrtho(true, Constants.WIDTH, Constants.HEIGHT);
         camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0);
+        bg = new TextureRegion(new Texture("space_bg.jpg"), (int) camera.viewportWidth, (int) camera.viewportHeight);
+        TextureRegion btnBg = new TextureRegion(new Texture("label_bg.png"));
+        textButton = new TextButton(btnBg, "Jouer", camera.viewportWidth/2, (3*camera.viewportHeight)/6,  3f);
+        quitButton = new TextButton(btnBg, "Quitter", camera.viewportWidth/2, (5*camera.viewportHeight)/6, 3f);
+        TextureRegion settingsRegion = new TextureRegion(new Texture("settings.png"));
+        settings = new Button(settingsRegion, camera.viewportWidth-settingsRegion.getRegionWidth()-10, 10, 1);
+        title = new BitmapFont(Gdx.files.internal("myfont.fnt"), true);
+        settingsSprite = new Sprite(settingsRegion);
+        settingsSprite.setPosition(camera.viewportWidth-settingsRegion.getRegionWidth()-10, 10);
     }
 
     @Override
@@ -76,7 +77,7 @@ public class MenuScreen implements Screen {
         game.batch.draw(bg, 0, 0);
         textButton.draw(game.batch);
         quitButton.draw(game.batch);
-        title.draw(game.batch, Constants.TITLE, Constants.WIDTH/2-lineWidth/2, Constants.HEIGHT/6-lineHeight/2);
+        title.draw(game.batch, Constants.TITLE, camera.viewportWidth/2-lineWidth/2, camera.viewportHeight/6-lineHeight/2);
         settingsSprite.draw(game.batch);
         game.batch.end();
 

@@ -22,17 +22,16 @@ public class SplashScreen implements Screen {
     private OrthographicCamera camera;
 
     private BitmapFont madeByFont;
-    private String madeBy = "Made by";
+    private String madeBy = "Fait par";
 
     private float width, height, lineWidth;
 
     public SplashScreen(ShipFighterGame game) {
         this.game = game;
-        splash = new TextureRegion(new Texture("splash.png"));
         camera = new OrthographicCamera();
         camera.setToOrtho(true, Constants.WIDTH, Constants.HEIGHT);
         camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0);
-
+        splash = new TextureRegion(new Texture("splash.png"));
         madeByFont = new BitmapFont(Gdx.files.internal("myfont.fnt"), true);
         madeByFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         madeByFont.getData().setScale(2f);
@@ -41,7 +40,7 @@ public class SplashScreen implements Screen {
     @Override
     public void show() {
         splash.flip(false, true);
-        height = Constants.HEIGHT*1.2f;
+        height = camera.viewportHeight*1.2f;
         float diff = height-splash.getRegionHeight();
         width = splash.getRegionWidth()+diff;
 
@@ -57,8 +56,8 @@ public class SplashScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.batch.begin();
-        game.batch.draw(splash, Constants.WIDTH/2-width/2, Constants.HEIGHT/2-height/2, width, height);
-        madeByFont.draw(game.batch, madeBy, Constants.WIDTH/2-lineWidth/2, (Constants.HEIGHT/2-splash.getRegionHeight()/2)/6);
+        game.batch.draw(splash, camera.viewportWidth/2-width/2, camera.viewportHeight/2-height/2, width, height);
+        madeByFont.draw(game.batch, madeBy, camera.viewportWidth/2-lineWidth/2, (camera.viewportHeight/2-splash.getRegionHeight()/2)/6);
         game.batch.end();
     }
 

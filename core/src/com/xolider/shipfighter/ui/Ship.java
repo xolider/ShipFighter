@@ -47,7 +47,7 @@ public class Ship {
     private TextureRegion[] regions = {new TextureRegion(meteor1), new TextureRegion(meteor2)};
 
     private BitmapFont reloadingFont;
-    private String reloading = "Reloading...";
+    private String reloading = "REchargement...";
 
     private BitmapFont ammoFont;
 
@@ -149,8 +149,8 @@ public class Ship {
                 ammo--;
             }
             else {
-                Missile missile = new Missile(this.x, Constants.HEIGHT-this.region.getRegionHeight()-decalY);
-                Missile missile1 = new Missile(this.x + this.region.getRegionWidth()-missileTexture.getRegionWidth(), Constants.HEIGHT-this.region.getRegionHeight()-decalY);
+                Missile missile = new Missile(this.x+20, Constants.HEIGHT-this.region.getRegionHeight()-decalY);
+                Missile missile1 = new Missile(this.x + this.region.getRegionWidth()-missileTexture.getRegionWidth()-20, Constants.HEIGHT-this.region.getRegionHeight()-decalY);
                 missiles.add(missile);
                 missiles.add(missile1);
                 ammo -= 2;

@@ -27,11 +27,11 @@ public class SettingsScreen implements Screen {
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(true, Constants.WIDTH, Constants.HEIGHT);
-        camera.position.set(Constants.WIDTH/2, Constants.HEIGHT/2, 0);
+        camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0);
         returnBtn = new Button(new TextureRegion(new Texture("left_arrow.png")), 10, 10, 1);
 
-        showHUD = new CheckboxSetting("Show HUD");
-        showHUD.setPosition(Constants.WIDTH/2-showHUD.getTotalWidth()/2, Constants.HEIGHT/2-showHUD.getTotalHeight()/2);
+        showHUD = new CheckboxSetting("Afficher l'ATH");
+        showHUD.setPosition(camera.viewportWidth/2-showHUD.getTotalWidth()/2, camera.viewportHeight/2-showHUD.getTotalHeight()/2);
         showHUD.setChecked(Constants.getPreferences().getBoolean("showHUD", true));
     }
 

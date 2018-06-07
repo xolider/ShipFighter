@@ -1,5 +1,5 @@
 android {
-    buildToolsVersion "26.0.1"
+    buildToolsVersion '27.0.3'
     compileSdkVersion 26
     sourceSets {
         main {
@@ -12,7 +12,7 @@ android {
             jniLibs.srcDirs = ['libs']
         }
 
-        instrumentTest.setRoot('tests')
+
     }
     packagingOptions {
         exclude 'META-INF/robovm/ios/robovm.xml'
@@ -21,8 +21,8 @@ android {
         applicationId "com.xolider.shipfighter"
         minSdkVersion 14
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode 4
+        versionName "1.1"
     }
     buildTypes {
         release {

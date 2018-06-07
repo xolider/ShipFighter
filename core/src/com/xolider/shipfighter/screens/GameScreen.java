@@ -1,5 +1,6 @@
 package com.xolider.shipfighter.screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -10,12 +11,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.xolider.shipfighter.ShipFighterGame;
 import com.xolider.shipfighter.ui.Button;
 import com.xolider.shipfighter.ui.Planet;
 import com.xolider.shipfighter.ui.Ship;
 import com.xolider.shipfighter.ui.TextButton;
 import com.xolider.shipfighter.utils.Constants;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by clement on 20/10/17.
@@ -43,10 +47,12 @@ public class GameScreen implements Screen {
 
     public GameScreen(ShipFighterGame game) {
         this.game = game;
-        bg = new TextureRegion(new Texture("space_bg.jpg"), Constants.WIDTH, Constants.HEIGHT);
+
         camera = new OrthographicCamera();
         camera.setToOrtho(true, Constants.WIDTH, Constants.HEIGHT);
         camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0);
+        System.out.println(camera.viewportWidth);
+        bg = new TextureRegion(new Texture("space_bg.jpg"), (int) camera.viewportWidth, (int) camera.viewportHeight);
         Texture btnTexture = new Texture("label_bg.png");
         TextureRegion right_arrow = new TextureRegion(new Texture("right_arrow.png"));
         TextureRegion left_arrow = new TextureRegion(new Texture("left_arrow.png"));
@@ -57,17 +63,17 @@ public class GameScreen implements Screen {
         TextureRegion mainMenuRegion = new TextureRegion(btnTexture);
         TextureRegion mainMenuRestartRegion = new TextureRegion(btnTexture);
         planetRegion.flip(false, true);
-        right = new Button(right_arrow, (7*Constants.WIDTH)/8+right_arrow.getRegionWidth()/2, Constants.HEIGHT-right_arrow.getRegionHeight()-30, 1.5f);
-        left = new Button(left_arrow, (6.5f*Constants.WIDTH)/8-left_arrow.getRegionWidth()/2, Constants.HEIGHT-left_arrow.getRegionHeight()-30, 1.5f);
-        shot = new Button(shotRegion, Constants.WIDTH/8, Constants.HEIGHT-shotRegion.getRegionHeight()-30, 1.5f);
-        pauseButton = new Button(pauseRegion, Constants.WIDTH-pauseRegion.getRegionWidth(), 0, 0.7f);
+        right = new Button(right_arrow, (7*camera.viewportWidth)/8+right_arrow.getRegionWidth()/2, camera.viewportHeight-right_arrow.getRegionHeight()-30, 1.5f);
+        left = new Button(left_arrow, (6.5f*camera.viewportWidth)/8-left_arrow.getRegionWidth()/2, camera.viewportHeight-left_arrow.getRegionHeight()-30, 1.5f);
+        shot = new Button(shotRegion, camera.viewportWidth/8, camera.viewportHeight-shotRegion.getRegionHeight()-30, 1.5f);
+        pauseButton = new Button(pauseRegion, camera.viewportWidth-pauseRegion.getRegionWidth(), 0, 0.7f);
         planet = new Planet(planetRegion);
         ship = new Ship(shipRegion, planetRegion.getRegionHeight()/4);
         scoreFont = new BitmapFont(Gdx.files.internal("myfont.fnt"), true);
         overFont = new BitmapFont(Gdx.files.internal("myfont.fnt"), true);
-        mainMenu = new TextButton(mainMenuRegion, "Back to menu", Constants.WIDTH/2, Constants.HEIGHT/2, 2);
-        mainMenuOver = new TextButton(mainMenuRegion, "Back to menu", (3*Constants.WIDTH)/4, Constants.HEIGHT-mainMenuRegion.getRegionHeight(), 2);
-        mainMenuRestart = new TextButton(mainMenuRestartRegion, "Retry", Constants.WIDTH/4, Constants.HEIGHT-mainMenuRestartRegion.getRegionHeight(), 2);
+        mainMenu = new TextButton(mainMenuRegion, "Retour au menu", camera.viewportWidth/2, camera.viewportHeight/2+100, 2);
+        mainMenuOver = new TextButton(mainMenuRegion, "Retour au menu", (3*camera.viewportWidth)/4, camera.viewportHeight-mainMenuRegion.getRegionHeight(), 2);
+        mainMenuRestart = new TextButton(mainMenuRestartRegion, "Réessayer", camera.viewportWidth/4, camera.viewportHeight-mainMenuRestartRegion.getRegionHeight(), 2);
     }
 
     @Override
@@ -112,7 +118,7 @@ public class GameScreen implements Screen {
             mainMenu.draw(game.batch);
         }
         if(Constants.isOver()) {
-            overFont.draw(game.batch, "Game Over", Constants.WIDTH/2-lineOverWidth/2, Constants.HEIGHT/2-lineOverHeight/2);
+            overFont.draw(game.batch, "Game Over", camera.viewportWidth/2-lineOverWidth/2, camera.viewportHeight/2-lineOverHeight/2);
             mainMenuOver.draw(game.batch);
             mainMenuRestart.draw(game.batch);
         }
@@ -129,8 +135,8 @@ public class GameScreen implements Screen {
     private void handleInput(float delta) {
         if(Constants.isPlaying()) {
             if(right.isTouched(0) || right.isTouched(1) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                if(ship.x >= Constants.WIDTH-ship.getRegion().getRegionWidth()) {
-                    ship.x = Constants.WIDTH-ship.getRegion().getRegionWidth();
+                if(ship.x >= camera.viewportWidth-ship.getRegion().getRegionWidth()) {
+                    ship.x = camera.viewportWidth-ship.getRegion().getRegionWidth();
                 }
                 else {
                     ship.x += 700*delta;
@@ -153,6 +159,12 @@ public class GameScreen implements Screen {
                 game.setScreen(new MenuScreen(game));
             }
             else if(mainMenuRestart.isClicked(0)) {
+                if(game.controller != null) {
+                    if(TimeUnit.SECONDS.convert(TimeUtils.nanoTime() - Constants.LAST_AD_SHOWN, TimeUnit.NANOSECONDS) >= 60) {
+                        game.controller.showAd();
+                        Constants.LAST_AD_SHOWN = TimeUtils.nanoTime();
+                    }
+                }
                 ship.restart();
                 Constants.state = Constants.State.PLAY;
             }
