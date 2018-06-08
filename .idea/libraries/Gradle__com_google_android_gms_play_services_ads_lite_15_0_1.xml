@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: com.google.android.gms:play-services-ads-lite-15.0.1">
+    <CLASSES>
+      <root url="jar:///opt/gradle/caches/transforms-1/files-1.1/play-services-ads-lite-15.0.1.aar/0511a4bf4cfd177156418bb82fe270b5/jars/classes.jar!/" />
+      <root url="file:///opt/gradle/caches/transforms-1/files-1.1/play-services-ads-lite-15.0.1.aar/0511a4bf4cfd177156418bb82fe270b5/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
