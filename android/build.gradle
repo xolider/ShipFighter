@@ -21,8 +21,8 @@ android {
         applicationId "com.xolider.shipfighter"
         minSdkVersion 14
         targetSdkVersion 26
-        versionCode 4
-        versionName "1.1"
+        versionCode 9
+        versionName "1.2"
     }
     buildTypes {
         release {
@@ -117,7 +117,7 @@ eclipse {
 idea {
     module {
         sourceDirs += file("src");
-        scopes = [ COMPILE: [plus:[project.configurations.compile]]]        
+        scopes = [COMPILE: [plus: [project.configurations.compile]]]
 
         iml {
             withXml {
